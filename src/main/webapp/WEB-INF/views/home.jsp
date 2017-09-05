@@ -4,35 +4,12 @@
 <html>
 <head>
 <title>Twitter</title>
-<style>
-body {
-	text-align: center;
-}
 
-ul {
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
-	overflow: hidden;
-	background-color: #333;
-}
-
-li {
-	float: left;
-}
-
-li a {
-	display: inline-block;
-	color: white;
-	text-align: center;
-	padding: 14px 16px;
-	text-decoration: none;
-}
-
-li a:hover {
-	background-color: #111;
-}
-</style>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="<c:url value="/resources/js/home.js"/>">
+</script>
+<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/menu.css"/>" />
 
 </head>
 <body>
@@ -71,57 +48,8 @@ li a:hover {
 	<%
 		}
 	%>
-
+	
+	
+	<input id="user" style="display:none" value="<%=session.getAttribute("username")%>" >
 </body>
-
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script>
-	$.ajax({
-		type : 'GET',
-		url : 'http://localhost:8091/twitter/getMessages',
-		dataType : 'json'
-	}).then(
-			function(data) {
-				for (var index = 0; index < data.length; index++) {
-					$('#messages').append(
-							"<p>" + data[index].user + ":"
-									+ data[index].content + "</p>");
-				}
-			});
-	 $('#submit').click( function() { 
-	var content = document.getElementById("content").value;
-	var user = "<%=session.getAttribute("username")%>";
-	var data = {"user":  user, "content" :  content};
-	$.ajax({
-		url: "http://localhost:8091/twitter/addMessage",
-		type:"post",
-	        dataType : "json",
-	        async : true,
-	        data: JSON.stringify(data),
-	        contentType: "application/json; charset=utf-8",
-		success: function(data) 
-			{
-			location.reload();
-
-			},
-			failure: function(data){
-			}
-		}); 
-	});
-	 
-	 
-	 $('#submitSearch').click( function() { 
-			var searchUser = document.getElementById("search").value;
-			console.log(searchUser);
-			$.ajax({
-				url: 'http://localhost:8091/twitter/search/'+searchUser,
-				type:'GET',
-			    dataType : 'json',
-			}).then(
-					function(data) {	
-							$('#userSearch').append("<p>"+ data.username + " " + data.fullName + " " + data.age +  "</p>");
-					})
-					});
-</script>
 </html>

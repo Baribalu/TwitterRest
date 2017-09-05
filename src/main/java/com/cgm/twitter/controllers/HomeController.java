@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -30,7 +31,7 @@ import com.cgm.twitter.services.UserService;
 /**
  * Handles requests for the application home page.
  */
-@Controller
+@RestController
 @RequestMapping("/home")
 public class HomeController {
 	
@@ -40,9 +41,26 @@ public class HomeController {
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
 	@RequestMapping(method = RequestMethod.GET)
-	public String home(ModelMap model) {
-		model.put("newMessage",new Message());
-		return "home";
+	public ModelAndView home(ModelMap model) {
+		model.put("message", new Message());
+		return new ModelAndView("home");
+	}
+
+	@RequestMapping(value = "/getMessages", method = RequestMethod.GET)
+	public @ResponseBody ArrayList<Message> getMessages(ModelMap model, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		String username = (String) request.getSession().getAttribute("username");
+		ArrayList<Message> messages = null;
+		if (username != null) {
+			messages = userService.getFollowingMessages(username);
+		}
+		return messages;
+	}
+
+	@RequestMapping(value = "/addMessage", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
+	public @ResponseBody Message addMessage(@RequestBody Message message, HttpServletRequest request) throws Exception {
+		userService.postMessage(message.getUser(), message);
+		return message;
 	}
 	
 	
