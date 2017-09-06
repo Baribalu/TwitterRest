@@ -45,11 +45,49 @@ $(document).ready(function(){
 					function(data) {	
 						var input;
 						if(data.isFriend){
-							input="<input type=\"submit\" id=\"unfollow\" value=\"Unfollow\">";
+							input="<button type=\"submit\" id=\"unfollow\" onclick=\"unfollow('"+data.username+"')\" value=\""+ data.username +"\">Unfollow</button>";
 						}else{
-							input="<input type=\"submit\" id=\"follow\" value=\"Follow\">";
+							input="<button type=\"submit\" id=\"follow\" onclick=\"follow('"+data.username+"')\" value=\""+ data.username +"\">Follow</button>";
 						}
 							$('#userSearch').append("<p>"+ data.username + " " + data.fullName + " " + data.age + " " + input +"</p>");
 					})
 			});
 });
+
+function follow(data){
+	var friend = {"username":  data, "fullName" :  "", "age": "", "isFriend":""};
+	$.ajax({
+		url: "http://localhost:8080/twitterrest/friends/add",
+		type:"post",
+	        dataType : "json",
+	        async : true,
+	        data: JSON.stringify(friend),
+	        contentType: "application/json; charset=utf-8",
+		success: function(data) 
+			{
+			location.reload();
+
+			},
+			failure: function(data){
+			}
+		}); 
+}
+
+function unfollow(data){
+	var friend = {"username":  data, "fullName" :  "", "age": "", "isFriend":""};
+	$.ajax({
+		url: "http://localhost:8080/twitterrest/friends/remove",
+		type:"post",
+	        dataType : "json",
+	        async : true,
+	        data: JSON.stringify(friend),
+	        contentType: "application/json; charset=utf-8",
+		success: function(data) 
+			{
+			location.reload();
+
+			},
+			failure: function(data){
+			}
+		}); 
+}

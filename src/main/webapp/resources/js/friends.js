@@ -12,7 +12,6 @@ $(document).ready(function(){
 			}else{
 				input="<button type=\"submit\" id=\"follow\" onclick=\"follow('"+data[index].username+"')\" value=\""+ data[index].username +"\">Follow</button>";
 			}
-			console.log(input);
 				$('#friends').append("<p>"+ data[index].username + " " + data[index].fullName + " " + data[index].age + " " + input +"</p>");
 				$("#friends").append("<input style=\"display:none\" value=" + data[index].username + "\"/>");
 		}
