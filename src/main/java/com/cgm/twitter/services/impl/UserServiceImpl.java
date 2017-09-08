@@ -2,17 +2,23 @@ package com.cgm.twitter.services.impl;
 
 import java.util.ArrayList;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cgm.builder.AccountBuilder;
 import com.cgm.entities.Account;
 import com.cgm.entities.Friend;
 import com.cgm.entities.Message;
+import com.cgm.twitter.domain.User;
+import com.cgm.twitter.repository.AbstractDAO;
 import com.cgm.twitter.services.UserService;
 
 @Service
 public class UserServiceImpl implements UserService {
 
+	@Autowired
+	AbstractDAO<User> abstractDAO;
+	
 	@Override
 	public Account getAccount(Account account) {
 		Account myAccount = null;
@@ -78,6 +84,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void removeUser(String username,String user) {
 		AccountBuilder.following.get(username).remove(user);
+	}
+	
+	@Override
+	public User findUser(Long id) {
+		return abstractDAO.findById(id);
 	}
 
 }

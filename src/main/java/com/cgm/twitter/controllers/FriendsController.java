@@ -1,5 +1,6 @@
 package com.cgm.twitter.controllers;
 
+import java.awt.List;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +27,7 @@ public class FriendsController {
 	UserService userService;
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView friends(ModelMap model, HttpServletRequest request) {
+	public ModelAndView friends(ModelMap model) {
 		return new ModelAndView("friends");
 	}
 	

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.cgm.entities.Account;
 import com.cgm.entities.Friend;
 import com.cgm.entities.Message;
+import com.cgm.twitter.domain.User;
 
 public interface UserService {
 
@@ -15,5 +16,6 @@ public interface UserService {
 	public ArrayList<Friend> getFriends(String username);
 	public void addUser(String username,String user);
 	public void removeUser(String username,String user);
+	public User findUser(Long id);
 	
 }

@@ -43,6 +43,7 @@ public class HomeController {
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView home(ModelMap model) {
 		model.put("message", new Message());
+		System.out.println(userService.findUser(3L).getFullName());
 		return new ModelAndView("home");
 	}
 
