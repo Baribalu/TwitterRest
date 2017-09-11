@@ -34,6 +34,7 @@ public class LoginController {
 	public @ResponseBody ServiceResponse login(@RequestBody User account, ModelMap model, HttpServletRequest request) {
 		User myAccount = userService.getAccount(account);
 		ServiceResponse response = new ServiceResponse();
+		System.out.println(account.getUsername());
 		response.setCode(200);
 		if (myAccount != null) {
 			request.getSession().setAttribute("username", account.getUsername());

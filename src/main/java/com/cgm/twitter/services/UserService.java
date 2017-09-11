@@ -13,4 +13,7 @@ public interface UserService {
 	public List<User> getFriends(String username);
 	public List<User> getUsers(String username);
 	
+	public void addUser(String username,String newFriend);
+	public void removeUser(String username, String friend);
+	
 }

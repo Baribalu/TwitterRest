@@ -6,11 +6,16 @@ $(document).ready(function(){
 		dataType : 'json'
 	}).then(
 			function(data) {
+				if(data!=null){
+				$("#messages").text("");
 				for(var username in data){
 					for(var i=0;i<data[username].length;i++){
 						console.log(data[username][i].content);
 						$("#messages").append("<p>" + username+ ":" + data[username][i].content + "</p>");
 					}
+				}
+				}else{
+					$("#messages").text("You need to login!");
 				}
 				
 			});

@@ -29,7 +29,7 @@ $(document).ready(function(){
 	
 });
 function follow(data){
-	var friend = {"username":  data, "fullName" :  "", "age": "", "isFriend":""};
+	var friend = {"username":  data, "age": 0};
 	$.ajax({
 		url: "http://localhost:8080/twitterrest/friends/add",
 		type:"post",
@@ -48,7 +48,7 @@ function follow(data){
 }
 
 function unfollow(data){
-	var friend = {"username":  data, "fullName" :  "", "age": "", "isFriend":""};
+	var friend = {"username":  data, "age": 0};
 	$.ajax({
 		url: "http://localhost:8080/twitterrest/friends/remove",
 		type:"post",

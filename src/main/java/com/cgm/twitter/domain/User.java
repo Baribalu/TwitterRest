@@ -18,8 +18,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "users")
@@ -47,6 +49,7 @@ public class User implements Serializable{
 	@JoinColumn(name = "id_user")
 	private List<Message> messages;
 	
+	@JsonIgnore
 	@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
 	@JoinTable(
 			name = "friends" , joinColumns = @JoinColumn(name = "user_id", referencedColumnName  = "ID"),
@@ -109,5 +112,18 @@ public class User implements Serializable{
 	public void setMessages(List<Message> messages) {
 		this.messages = messages;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		User user = (User) obj;
+		if(user.getUsername().equals(this.username)) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	
 
 }

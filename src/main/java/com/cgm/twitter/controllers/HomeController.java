@@ -52,11 +52,14 @@ public class HomeController {
 			HttpServletResponse response) throws Exception {
 		String username = (String) request.getSession().getAttribute("username");
 		List<Message> messages = null;
+		Map<String,List<Message>> userMessages = new HashMap<String, List<Message>>();
 		if (username != null) {
 			messages = messageService.getMessages(username);
+			userMessages.put(username, messages);
 		}
-		Map<String,List<Message>> userMessages = new HashMap<String, List<Message>>();
-		userMessages.put(username, messages);
+		else {
+			userMessages = null;
+		}
 		return userMessages;
 	}
 

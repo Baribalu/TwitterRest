@@ -1,6 +1,7 @@
 package com.cgm.twitter.services.impl;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.NoResultException;
@@ -54,14 +55,28 @@ public class UserServiceImpl implements UserService {
 		User user = userDAO.findByUsername(username);
 		List<User> friends = user.getUser();
 		List<User> users = userDAO.findAllUsers(username);
-		for(User friend : friends) {
-			for(User duplicateUser:users) {
-				if(friend.getUsername().equals(duplicateUser.getUsername())) {
-					users.remove(duplicateUser);
+		Iterator<User> iter = users.iterator();
+			for(User friend:friends) {
+				String userna = iter.next().getUsername();
+				if(friend.getUsername().equals(userna)) {
+					iter.remove();
 				}
-			}
 		}
 		return users;
+	}
+	
+	@Override
+	public void addUser(String username,String newFriend) {
+		User user = userDAO.findByUsername(username);
+		User newUser = userDAO.findByUsername(newFriend);
+		userDAO.addFriend(user, newUser);
+	}
+	
+	@Override
+	public void removeUser(String username, String friend) {
+		User user = userDAO.findByUsername(username);
+		User newUser = userDAO.findByUsername(friend);
+		userDAO.removeFriend(user, newUser);
 	}
 
 }

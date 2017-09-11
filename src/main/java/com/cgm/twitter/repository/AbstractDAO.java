@@ -104,6 +104,16 @@ public class AbstractDAO<E> {
 		
 	}
 	
+	@Transactional
+	public void addFriend(User user, User newUser) {
+		user.getUser().add(newUser);
+		em.merge(user);
+	}
 	
+	@Transactional
+	public void removeFriend(User user,User removeUser) {
+		user.getUser().remove(removeUser);
+		em.merge(user);
+	}
 	
 }

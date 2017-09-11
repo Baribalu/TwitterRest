@@ -45,16 +45,16 @@ public class FriendsController {
 	}
 	
 	@RequestMapping(value="add",method = RequestMethod.POST)
-	public @ResponseBody User addUser(@RequestBody User User,ModelMap model, HttpServletRequest request) {
+	public @ResponseBody User addUser(@RequestBody User user,ModelMap model, HttpServletRequest request) {
 		String username = (String)request.getSession().getAttribute("username");
-//		userService.addUser(username,User.getUsername());
-		return User;
+		userService.addUser(username,user.getUsername());
+		return user;
 	}
 	
 	@RequestMapping(value="remove",method = RequestMethod.POST)
 	public @ResponseBody User removeUser(@RequestBody User user,ModelMap model, HttpServletRequest request) {
 		String username = (String)request.getSession().getAttribute("username");
-//		userService.removeUser(username,User.getUsername());
+		userService.removeUser(username,user.getUsername());
 		return user;
 	}
 	

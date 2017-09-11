@@ -30,7 +30,7 @@
 		<beans:property name='driverClassName' value='org.postgresql.Driver' />
 		<beans:property name='url' value='jdbc:postgresql://localhost:5432/Twitter' />
 		<beans:property name='username' value='andrei' />
-		<beans:property name='password' value='3752' />
+		<beans:property name='password' value='andrei' />
 	</beans:bean>
 	
 	<!-- Defines the entity manager factory -->
