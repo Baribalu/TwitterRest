@@ -1,7 +1,7 @@
 package com.cgm.twitter.controllers;
 
-import java.awt.List;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.cgm.entities.Friend;
+import com.cgm.twitter.domain.User;
 import com.cgm.twitter.services.UserService;
 
 @RestController
@@ -27,28 +27,35 @@ public class FriendsController {
 	UserService userService;
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView friends(ModelMap model) {
+	public ModelAndView Users(ModelMap model) {
 		return new ModelAndView("friends");
 	}
 	
 	@RequestMapping(value="/getFriends" ,method = RequestMethod.GET)
-	public ArrayList<Friend> getFriends(HttpServletRequest request){
-		ArrayList<Friend> friends = userService.getFriends((String)request.getSession().getAttribute("username"));
+	public List<User> getFriends(HttpServletRequest request){
+		List<User> friends = userService.getFriends((String)request.getSession().getAttribute("username"));
 		return friends;
 	}
 	
-	@RequestMapping(value="add",method = RequestMethod.POST)
-	public @ResponseBody Friend addFriend(@RequestBody Friend friend,ModelMap model, HttpServletRequest request) {
+	@RequestMapping(value="/getUsers", method = RequestMethod.GET)
+	public List<User> getUSers(HttpServletRequest request){
 		String username = (String)request.getSession().getAttribute("username");
-		userService.addUser(username,friend.getUsername());
-		return friend;
+		List<User> users = userService.getUsers(username);
+		return users;
+	}
+	
+	@RequestMapping(value="add",method = RequestMethod.POST)
+	public @ResponseBody User addUser(@RequestBody User User,ModelMap model, HttpServletRequest request) {
+		String username = (String)request.getSession().getAttribute("username");
+//		userService.addUser(username,User.getUsername());
+		return User;
 	}
 	
 	@RequestMapping(value="remove",method = RequestMethod.POST)
-	public @ResponseBody Friend removeFriend(@RequestBody Friend friend,ModelMap model, HttpServletRequest request) {
+	public @ResponseBody User removeUser(@RequestBody User user,ModelMap model, HttpServletRequest request) {
 		String username = (String)request.getSession().getAttribute("username");
-		userService.removeUser(username,friend.getUsername());
-		return friend;
+//		userService.removeUser(username,User.getUsername());
+		return user;
 	}
 	
 }

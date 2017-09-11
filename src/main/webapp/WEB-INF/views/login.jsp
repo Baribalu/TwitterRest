@@ -5,6 +5,10 @@
 <head>
 <title>Twitter</title>
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/menu.css"/>" />
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="<c:url value="/resources/js/login.js"/>">
+</script>
 </head>
 <body>
 	<h1>Twitter</h1>
@@ -21,23 +25,21 @@
 		<li><a href="about">About</a></li>
 	</ul>
 	<br/><br/><br/>
-	<sf:form modelAttribute="account" action="login" method="POST">
 		<div>
 			<label>Username:</label>
-			<sf:input path="username" type="text" />
+			<input id="username" type="text" />
 		</div>
 		<br/>
 		<div>
 			<label>Password:</label>
-			<sf:input path="password" type="password" />
+			<input id="password" type="password" />
 		</div>
 		<br/>
 		<div>
-			<input type="submit" value="Login" />
+			<input id="Login" type="submit" value="Login" />
 		</div>
-	</sf:form>
 	<br/>
-	<div>${error}</div>
+	<div><p id="error"></p></div>
 
 </body>
 </html>

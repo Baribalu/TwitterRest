@@ -6,15 +6,23 @@ $(document).ready(function(){
 		dataType:"json"
 	}).then(function(data){
 		for(var index = 0; index < data.length; index++){
-			var input;
-			if(data[index].isFriend){
-				input="<button type=\"submit\" id=\"unfollow\" onclick=\"unfollow('"+data[index].username+"')\" value=\""+ data[index].username +"\">Unfollow</button>";
-			}else{
-				input="<button type=\"submit\" id=\"follow\" onclick=\"follow('"+data[index].username+"')\" value=\""+ data[index].username +"\">Follow</button>";
-			}
+				var input="<button type=\"submit\" id=\"unfollow\" onclick=\"unfollow('"+data[index].username+"')\" value=\""+ data[index].username +"\">Unfollow</button>";
 				$('#friends').append("<p>"+ data[index].username + " " + data[index].fullName + " " + data[index].age + " " + input +"</p>");
 				$("#friends").append("<input style=\"display:none\" value=" + data[index].username + "\"/>");
 		}
+	});
+	
+	$.ajax({
+		type: "GET",
+		url: "http://localhost:8080/twitterrest/friends/getUsers",
+		dataType:"json"
+	}).then(function(data){
+		for(var index = 0; index < data.length; index++){
+			var input="<button type=\"submit\" id=\"follow\" onclick=\"follow('"+data[index].username+"')\" value=\""+ data[index].username +"\">Follow</button>";
+				$('#friends').append("<p>"+ data[index].username + " " + data[index].fullName + " " + data[index].age + " " + input +"</p>");
+				$("#friends").append("<input style=\"display:none\" value=" + data[index].username + "\"/>");
+		}
+		
 	});
 	
 	

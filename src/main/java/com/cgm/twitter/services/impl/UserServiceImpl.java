@@ -1,14 +1,14 @@
 package com.cgm.twitter.services.impl;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.NoResultException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import com.cgm.builder.AccountBuilder;
-import com.cgm.entities.Account;
-import com.cgm.entities.Friend;
-import com.cgm.entities.Message;
 import com.cgm.twitter.domain.User;
 import com.cgm.twitter.repository.AbstractDAO;
 import com.cgm.twitter.services.UserService;
@@ -17,78 +17,51 @@ import com.cgm.twitter.services.UserService;
 public class UserServiceImpl implements UserService {
 
 	@Autowired
-	AbstractDAO<User> abstractDAO;
+	@Qualifier("userDAO")
+	AbstractDAO<User> userDAO;
+
+	@Override
+	public User getAccount(User account) {
+		User user=null;
+		try {
+			user = userDAO.findByUsername(account.getUsername());
+			if(user.getPassword().equals(account.getPassword())) {
+				return user;
+			}else {
+				return null;
+			}
+		} catch (NoResultException ex) {
+			return user;
+		}
+	}
+
+
+	@Override
+	public User findUser(Long id) {
+		return userDAO.findById(id);
+	}
 	
 	@Override
-	public Account getAccount(Account account) {
-		Account myAccount = null;
-		for (Account accountElement : AccountBuilder.accounts) {
-			if (accountElement.getPassword().equals(account.getPassword())
-					&& accountElement.getUsername().equals(account.getUsername())) {
-				myAccount = accountElement;
-			}
-		}
-		return myAccount;
-	}
-
-	@Override
-	public ArrayList<Message> getMessages(String username) {
-		ArrayList<Message> messages = AccountBuilder.messages.get(username);
-		return messages;
-	}
-
-	@Override
-	public ArrayList<Message> getFollowingMessages(String username) {
-		ArrayList<String> following = AccountBuilder.following.get(username);
-		ArrayList<Message> allMessages = new ArrayList<Message>();
-		allMessages.addAll(getMessages(username));
-		for (String user : following) {
-			ArrayList<Message> userMessages = AccountBuilder.messages.get(user);
-			allMessages.addAll(userMessages);
-		}
-		return allMessages;
-	}
-
-	@Override
-	public void postMessage(String username, Message message) {
-		ArrayList<Message> messages = AccountBuilder.messages.get(username);
-		messages.add(message);
-	}
-
-	@Override
-	public ArrayList<Friend> getFriends(String username) {
-		ArrayList<String> friendsUsername = new ArrayList<String>();
-		ArrayList<Friend> friends = new ArrayList<Friend>();
-		Friend newFriend;
-		friendsUsername = AccountBuilder.following.get(username);
-		for (Account account : AccountBuilder.accounts) {
-			newFriend = new Friend(account.getUsername(), account.getFullName(), account.getAge(), true);
-			for (String friend : friendsUsername) {
-				if (account.getUsername().equals(friend)) {
-					friends.add(newFriend);
-				}
-			}
-			if(friends.indexOf(newFriend) == -1 && (!account.getUsername().equals(username))) {
-				friends.add(new Friend(account.getUsername(),account.getFullName(),account.getAge(),false));
-			}
-		}
+	public List<User> getFriends(String username) {
+		User user = userDAO.findByUsername(username);
+		List<User> friends = user.getUser();
 		
 		return friends;
 	}
 	
 	@Override
-	public void addUser(String username,String user) {
-		AccountBuilder.following.get(username).add(user);
-	}
-	
-	@Override
-	public void removeUser(String username,String user) {
-		AccountBuilder.following.get(username).remove(user);
-	}
-	
-	@Override
-	public User findUser(Long id) {
-		return abstractDAO.findById(id);
+	public List<User> getUsers(String username){
+		User user = userDAO.findByUsername(username);
+		List<User> friends = user.getUser();
+		List<User> users = userDAO.findAllUsers(username);
+		for(User friend : friends) {
+			for(User duplicateUser:users) {
+				if(friend.getUsername().equals(duplicateUser.getUsername())) {
+					users.remove(duplicateUser);
+				}
+			}
+		}
+		return users;
 	}
 
 }

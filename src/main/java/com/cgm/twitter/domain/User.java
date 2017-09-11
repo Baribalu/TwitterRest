@@ -1,22 +1,30 @@
 package com.cgm.twitter.domain;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "users")
-public class User {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class User implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,24 +32,28 @@ public class User {
 	private Long id;
 	
 	@Column(name = "username", unique = true)
-	private String username = "";
+	private String username;
 	
 	@Column(name = "password")
-	private String password = "";
+	private String password;
 	
 	@Column(name = "full_name")
-	private String fullName = "";
+	private String fullName;
 	
 	@Column(name = "age")
-	private Integer age = 0;
+	private Integer age;
 	
-	@ManyToMany
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name = "id_user")
+	private List<Message> messages;
+	
+	@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
 	@JoinTable(
 			name = "friends" , joinColumns = @JoinColumn(name = "user_id", referencedColumnName  = "ID"),
 			inverseJoinColumns = @JoinColumn(name = "friend_id", referencedColumnName  = "ID")
 	)
 	private List<User> user;
-
+	
 	public Long getId() {
 		return id;
 	}
@@ -89,5 +101,13 @@ public class User {
 	public void setUser(List<User> user) {
 		this.user = user;
 	}
-	
+
+	public List<Message> getMessages() {
+		return messages;
+	}
+
+	public void setMessages(List<Message> messages) {
+		this.messages = messages;
+	}
+
 }

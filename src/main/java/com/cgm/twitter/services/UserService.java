@@ -1,21 +1,16 @@
 package com.cgm.twitter.services;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import com.cgm.entities.Account;
-import com.cgm.entities.Friend;
-import com.cgm.entities.Message;
 import com.cgm.twitter.domain.User;
 
 public interface UserService {
 
-	public Account getAccount(Account account);
-	public ArrayList<Message> getMessages(String username);
-	public void postMessage(String username, Message message);
-	public ArrayList<Message> getFollowingMessages(String username);
-	public ArrayList<Friend> getFriends(String username);
-	public void addUser(String username,String user);
-	public void removeUser(String username,String user);
+	public User getAccount(User account);
 	public User findUser(Long id);
+	
+	public List<User> getFriends(String username);
+	public List<User> getUsers(String username);
 	
 }

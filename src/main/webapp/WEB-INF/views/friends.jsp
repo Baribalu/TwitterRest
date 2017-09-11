@@ -29,6 +29,7 @@
 	<br />
 
 	<div id="friends"></div>
+	<div id="users"></div>
 
 </body>
 

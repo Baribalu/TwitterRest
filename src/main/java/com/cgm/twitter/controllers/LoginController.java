@@ -5,15 +5,20 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.cgm.entities.Account;
+import com.cgm.twitter.domain.User;
+import com.cgm.twitter.dto.ServiceResponse;
 import com.cgm.twitter.services.UserService;
 
-@Controller
+@RestController
 @RequestMapping("login")
 public class LoginController {
 
@@ -21,21 +26,23 @@ public class LoginController {
 	private UserService userService;
 
 	@RequestMapping(method = RequestMethod.GET)
-	public String login(ModelMap model, HttpServletRequest request) {
-		model.put("account", new Account());
-		return "login";
+	public ModelAndView login(ModelMap model) {
+		return new ModelAndView("login");
 	}
 
-	@RequestMapping(method = RequestMethod.POST)
-	public String login(@ModelAttribute("account") Account account, ModelMap model, HttpServletRequest request) {
-		Account myAccount = userService.getAccount(account);
+	@RequestMapping(method = RequestMethod.POST, consumes="application/json", produces="application/json")
+	public @ResponseBody ServiceResponse login(@RequestBody User account, ModelMap model, HttpServletRequest request) {
+		User myAccount = userService.getAccount(account);
+		ServiceResponse response = new ServiceResponse();
+		response.setCode(200);
 		if (myAccount != null) {
 			request.getSession().setAttribute("username", account.getUsername());
-			return "redirect:home";
+			return response;
 		}
 		else {
-			model.addAttribute("error","Bad Account!");
-			return "login";
+			response.setCode(202);
+			response.setMessage("Bad Account!");
+			return response;
 		}
 		
 	}

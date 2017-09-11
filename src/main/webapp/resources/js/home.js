@@ -6,17 +6,18 @@ $(document).ready(function(){
 		dataType : 'json'
 	}).then(
 			function(data) {
-				for (var index = 0; index < data.length; index++) {
-					$('#messages').append(
-							"<p>" + data[index].user + ":"
-									+ data[index].content + "</p>");
+				for(var username in data){
+					for(var i=0;i<data[username].length;i++){
+						console.log(data[username][i].content);
+						$("#messages").append("<p>" + username+ ":" + data[username][i].content + "</p>");
+					}
 				}
+				
 			});
 	
 	 $('#submit').click( function() { 
 	var content = document.getElementById("content").value;
-	var user = document.getElementById("user").value;
-	var data = {"user":  user, "content" :  content};
+	var data = {"content" :  content};
 	$.ajax({
 		url: "http://localhost:8080/twitterrest/home/addMessage",
 		type:"post",
